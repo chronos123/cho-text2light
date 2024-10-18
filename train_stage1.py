@@ -233,9 +233,9 @@ if __name__ == "__main__":
             "image_logger": {
                 "target": "taming.data.utils.ImageLogger",
                 "params": {
-                    "batch_frequency": 750,
+                    "batch_frequency": 2500,
                     "max_images": 4,
-                    "clamp": True
+                    # "clamp": True
                 }
             },
             "learning_rate_logger": {
@@ -248,7 +248,7 @@ if __name__ == "__main__":
         }
         callbacks_cfg = lightning_config.callbacks or OmegaConf.create()
         callbacks_cfg = OmegaConf.merge(default_callbacks_cfg, callbacks_cfg)
-        trainer_kwargs["callbacks"] = [instantiate_from_config(callbacks_cfg[k]) for k in callbacks_cfg]
+        trainer_kwargs["callbacks"] = [instantiate_from_config(callbacks_cfg[k]) for k in callbacks_cfg] +  [trainer_kwargs["checkpoint_callback"]]
 
         trainer = Trainer.from_argparse_args(trainer_opt, **trainer_kwargs)
 

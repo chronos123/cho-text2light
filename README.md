@@ -80,7 +80,7 @@ Here are some examples, the output will be saved in `./generated_panorama`:
 - Generate HDR panoramas from a list of texts:
     ```bash
     # assume your texts is stored in alt.txt
-    python text2light.py -rg logs/global_sampler_clip -rl logs/local_sampler_outdoor --outdir ./generated_panorama --text ./alt.txt --clip clip_emb.npy --sritmo ./logs/sritmo.pth --sr_factor 4
+    python text2light.py -rg logs/global_sampler_clip -rl logs/local_sampler_outdoor --outdir /mnt/disk10T/sxc/360_gen_VQ/latent-diffusion/comparision_result/text2light/raw --text /mnt/disk10T/sxc/360_gen_VQ/latent-diffusion/scripts/test_prompts.txt --clip clip_emb.npy --sritmo ./logs/sritmo.pth --sr_factor 4 
     ```
 
 - Generate low-resolution (512x1024) LDR panoramas only:

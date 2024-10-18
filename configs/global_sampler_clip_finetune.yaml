@@ -1,0 +1,73 @@
+model:
+  base_learning_rate: 4.5e-06
+  target: taming.models.global_sampler.GlobalSamplerWithCLIP
+  params:
+    cond_stage_key: knn
+    transformer_config:
+      target: taming.modules.transformer.mingpt.GPT
+      params:
+        vocab_size: 1024
+        block_size: 133 #8x16 + 5
+        n_layer: 12
+        n_head: 8
+        n_embd: 1024
+    first_stage_config:
+      target: taming.models.vqgan.VQCirModel
+      params:
+        ckpt_path: # path to the global codebook
+        embed_dim: 256
+        n_embed: 1024
+        ddconfig:
+          double_z: false
+          z_channels: 256
+          resolution: 256
+          in_channels: 3
+          out_ch: 3
+          ch: 128
+          ch_mult:
+          - 1
+          - 1
+          - 2
+          - 2
+          - 4
+          num_res_blocks: 2
+          attn_resolutions:
+          - 16
+          dropout: 0.0
+        lossconfig:
+          target: taming.modules.losses.DummyLoss
+    cond_stage_config:
+      target: taming.modules.misc.coord.CoordStage
+      params:
+        n_embed: 1024
+        down_factor: 16
+
+data:
+  target: taming.data.utils.DataModuleFromConfig
+  params:
+    batch_size: 16
+    num_workers: 8
+    train:
+      target: taming.data.custom.CustomTrainHolistic
+      params:
+        training_images_list_file: ./train.txt
+        size: 256
+        holistic: 128
+        clip_emb: clip_emb_ours.npy
+    validation:
+      target: taming.data.custom.CustomTestHolistic
+      params:
+        test_images_list_file: ./test.txt
+        size: 256
+        holistic: 128
+        clip_emb: clip_emb_ours.npy
+
+
+lightning:
+  callbacks:
+    image_logger:
+      target: taming.data.utils.ImageLogger
+      params:
+        batch_frequency: 2500
+        max_images: 4
+        increase_log_steps: False

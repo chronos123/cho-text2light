@@ -12,7 +12,8 @@ from PIL import Image
 import torch
 import torchvision
 from taming.data.helper_types import Annotation
-from torch._six import string_classes
+# from torch._six import string_classes
+string_classes = str
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.data._utils.collate import np_str_obj_array_pattern, default_collate_err_msg_format
 import pytorch_lightning as pl

@@ -1,8 +1,9 @@
 model:
   base_learning_rate: 4.5e-6
   target: taming.models.vqgan.VQCirModel
+  monitor: val/rec_loss_epoch
   params:
-    ckpt_path: 
+    # ckpt_path: 
     embed_dim: 256
     n_embed: 1024
     ddconfig:
@@ -34,13 +35,22 @@ data:
     train:
       target: taming.data.custom.CustomTrainHolistic
       params:
-        training_images_list_file: ./data/meta/train_aug.txt
+        training_images_list_file: ./train.txt
         size: 256
         holistic: 128
     validation:
       target: taming.data.custom.CustomTestHolistic
       params:
-        test_images_list_file: ./data/meta/val_aug.txt
+        test_images_list_file: ./test.txt
         size: 256
         holistic: 128
 
+
+lightning:
+  callbacks:
+    image_logger:
+      target: taming.data.utils.ImageLogger
+      params:
+        batch_frequency: 10000
+        max_images: 2
+        increase_log_steps: False

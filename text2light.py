@@ -25,7 +25,7 @@ def get_knn(database: np.array, index: faiss.Index, txt_emb, k = 5):
 
 
 @torch.no_grad()
-def text2light(models: dict, prompts, outdir, params: dict):
+def text2light(models: dict, prompts, outdir, params: dict, _id=None):
     # models
     global_sampler = models["gs"]
     local_sampler = models["ls"]
@@ -68,7 +68,7 @@ def text2light(models: dict, prompts, outdir, params: dict):
 
     xsample_holistic = global_sampler.decode_to_img(idx, cshape)
     for i in range(xsample_holistic.shape[0]):
-        save_image(xsample_holistic[i], os.path.join(outdir, "holistic", "holistic_[{}].png".format(prompts[i])))
+        save_image(xsample_holistic[i], os.path.join(outdir, "holistic", "{}_{}_holistic_[{}].png".format(_id, i, prompts[i])))
 
     # synthesize patch by patch according to holistic condition
     h = 512
@@ -134,7 +134,7 @@ def text2light(models: dict, prompts, outdir, params: dict):
             idx[:,i,j] = ix.reshape(-1)
     xsample = local_sampler.decode_to_img(idx, cshape)
     for i in range(xsample.shape[0]):
-        save_image(xsample[i], os.path.join(outdir, "ldr", "ldr_[{}].png".format(prompts[i])))
+        save_image(xsample[i], os.path.join(outdir, "ldr", "{}_{}_holistic_[{}].png".format(_id, i, prompts[i])))
 
     # super-resolution inverse tone mapping
     if params['sritmo'] is not None:
@@ -354,7 +354,7 @@ if __name__ == "__main__":
         'sritmo': opt.sritmo,
         'sr_factor': opt.sr_factor,
     }
-    for i in range(0, len(prompts), opt.bs):
+    for i in tqdm(range(0, len(prompts), opt.bs)):
         end_i = min(len(prompts), i + opt.bs)
         prompt = prompts[i: i+opt.bs]
-        text2light(input_models, prompt, outdir, input_params)
+        text2light(input_models, prompt, outdir, input_params, i)
