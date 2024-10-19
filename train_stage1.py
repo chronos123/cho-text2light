@@ -234,8 +234,8 @@ if __name__ == "__main__":
                 "target": "taming.data.utils.ImageLogger",
                 "params": {
                     "batch_frequency": 2500,
-                    "max_images": 4,
-                    # "clamp": True
+                    "max_images": 1,
+                    "clamp": True
                 }
             },
             "learning_rate_logger": {
