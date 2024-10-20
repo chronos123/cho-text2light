@@ -6,7 +6,7 @@ model:
     holistic_config:
       target: taming.models.vqgan.VQCirModel
       params:
-        ckpt_path: # path to the global codebook
+        ckpt_path: logs/2024-10-18T15-25-31_global_codebook/checkpoints/epoch=000216.ckpt # path to the global codebook
         embed_dim: 256
         n_embed: 1024
         ddconfig:
@@ -33,7 +33,7 @@ model:
     first_stage_config:
       target: taming.models.vqgan.VQModel
       params:
-        ckpt_path: # path to the local codebook
+        ckpt_path: logs/2024-10-18T15-25-14_local_codebook/checkpoints/epoch=000422.ckpt # path to the local codebook
         embed_dim: 256
         n_embed: 1024
         ddconfig:
@@ -64,7 +64,7 @@ model:
 data:
   target: taming.data.utils.DataModuleFromConfig
   params:
-    batch_size: 24
+    batch_size: 12
     num_workers: 16
     train:
       target: taming.data.custom.CustomTrain
