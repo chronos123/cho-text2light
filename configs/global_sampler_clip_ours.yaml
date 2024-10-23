@@ -71,3 +71,7 @@ lightning:
         batch_frequency: 2500
         max_images: 2
         increase_log_steps: False
+
+  trainer:
+      benchmark: True
+      max_epochs: 140
